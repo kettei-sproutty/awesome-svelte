@@ -32,5 +32,3 @@ jobs:
           run_install: true
       - name: Build sveltekit
         run: pnpm build
-      - name: Build storybook
-        run: pnpm build-storybook
