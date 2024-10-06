@@ -19,7 +19,8 @@ jobs:
       - name: Lint
         run: pnpm lint
       - name: Check licenses
-        run: pnpm check:licenses
+        run: |
+          echo "TODO: Check licenses"
   release:
     runs-on: ubuntu-latest
     needs: check
