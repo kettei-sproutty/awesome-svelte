@@ -1,0 +1,8 @@
+{
+	"recommendations": [
+		"EditorConfig.EditorConfig",
+		"svelte.svelte-vscode",
+		"esbenp.prettier-vscode",
+		"bradlc.vscode-tailwindcss"
+	]
+}
