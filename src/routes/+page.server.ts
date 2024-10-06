@@ -4,48 +4,61 @@ import type { Load } from '@sveltejs/kit';
 
 export const prerender = true;
 
-const getDirectories = (source: string) => {
-	return fs.readdirSync(source).reduce(
-		(acc, name) => {
-			const path = `${source}/${name}`;
-			if (fs.statSync(path).isDirectory()) {
-				const readmePath = `${path}/README.md`;
-				if (fs.existsSync(readmePath)) {
-					const readme = fs.readFileSync(readmePath, 'utf-8');
+type Components = {} & { [key: string]: string | string[] };
 
-					const yaml = readme.match(/---([\s\S]*?)---/)?.[1];
+const analyze = (path: string): Components[] => {
+	const readme = fs.readFileSync(`${path}/README.md`, 'utf-8');
 
-					if (yaml) {
-						const meta = yaml.split('\n').reduce(
-							(acc, line) => {
-								const index = line.indexOf(':');
-								if (index === -1) return acc;
-								const key = line.slice(0, index);
-								const value = line.slice(index + 1);
+	const yaml = readme.match(/---([\s\S]*?)---/)?.[1];
+	if (!yaml) return [];
 
-								acc[key.trim()] = value?.trim();
-								return acc;
-							},
-							{} as { [key: string]: string }
-						);
+	// TODO: use a yaml parser
+	const meta = yaml.split('\n').reduce(
+		(acc, line) => {
+			const index = line.indexOf(':');
+			if (index === -1) return acc;
 
-						acc.push({ path: path.replace('src/components/', ''), ...meta });
-					} else {
-						acc.push({ path: path.replace('src/components/', '') });
-					}
-				} else {
-					acc.push(...getDirectories(path));
-				}
-			}
+			const key = line.slice(0, index);
+			const value = line.slice(index + 1);
 
-			return acc.filter(Boolean);
+			acc[key.trim()] = value?.trim();
+			return acc;
 		},
-		[] as { path: string; [key: string]: string }[]
+		{} as { [key: string]: string }
 	);
+
+	const otherVersions = fs
+		.readdirSync(path)
+		.filter((f) => f !== 'README.md' && f !== 'index.svelte')
+		.map((f) => f.replace(path, '').replace('.svelte', ''));
+
+	return [
+		{
+			...meta,
+			otherVersions
+		}
+	];
+};
+
+const walk = (dir: string): Components[] => {
+	return fs.readdirSync(dir).flatMap((f) => {
+		const path = `${dir}/${f}`;
+		const stat = fs.statSync(path);
+
+		const readmePath = `${path}/README.md`;
+
+		if (fs.existsSync(readmePath)) {
+			return analyze(path);
+		} else if (stat.isDirectory()) {
+			return walk(path);
+		}
+
+		return [];
+	});
 };
 
 export const load: Load = async () => {
-	const components = getDirectories('src/components');
+	const components = walk('src/components');
 
 	return { components };
 };

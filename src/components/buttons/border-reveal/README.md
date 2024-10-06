@@ -1,4 +1,6 @@
 ---
+id: border-reveal
+name: border-reveal
 author: https://x.com/jh3yy
 author_name: jh3yy
 source: https://x.com/jh3yy/status/1837591305029144818

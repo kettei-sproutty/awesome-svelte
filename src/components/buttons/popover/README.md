@@ -1,4 +1,6 @@
 ---
+name: popover
+id: popover
 author: https://x.com/jh3yy
 author_name: jh3yy
 categories: button
