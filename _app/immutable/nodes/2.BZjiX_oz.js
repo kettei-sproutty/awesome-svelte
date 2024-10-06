@@ -1,0 +1,1 @@
+import{a as p,t as o}from"../chunks/disclose-version.Bg1Py1au.js";import{t as s,c as m,r as f}from"../chunks/runtime.DcozdgtE.js";import{s as i}from"../chunks/render.6DGg8_pc.js";var n=o("<pre> </pre>");function v(e,a){var t=n(),r=m(t);s(()=>i(r,JSON.stringify(a.data,void 0,"	"))),f(t),p(e,t)}export{v as component};
