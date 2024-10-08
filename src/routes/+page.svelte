@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Search, LayoutGrid, List } from 'lucide-svelte';
-
+	import BorderRevealNoJS from '../components/buttons/border-reveal/no-js.svelte';
+	import BorderRevealNoTw from '../components/buttons/border-reveal/no-tailwind.svelte';
+	import BorderReveal from '../components/buttons/border-reveal/index.svelte';
 	let { data } = $props();
 
 	let search = $state('');
@@ -16,6 +18,12 @@
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
+	<BorderRevealNoJS onClick={() => console.log('pressed')} style="double">no js</BorderRevealNoJS>
+
+	<BorderRevealNoTw onClick={() => console.log('pressed')}>no tailwind</BorderRevealNoTw>
+
+	<BorderReveal onClick={() => console.log('pressed')}>default</BorderReveal>
+
 	<div class="flex items-center space-x-2 border rounded-md p-2">
 		<Search class="w-5 h-5 text-gray-500" />
 		<input

@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import type { Load } from '@sveltejs/kit';
 
 export const prerender = true;
-
+// export const csr = false
 type Components = {} & { [key: string]: string | string[] };
 
 const analyze = (path: string): Components[] => {
